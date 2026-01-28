@@ -1,111 +1,175 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>System Interface</title>
-    <!-- Fonts: Cinzel (Ancient vibes) and Space Mono (System vibes) -->
+    <title>System Interface // SHADOW SLAVE</title>
+    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap"
+        rel="stylesheet">
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
         :root {
-            --bg-deep: #050508;
-            --bg-panel: #0a0a12;
-            --border-dim: #1a1a2e;
+            /* Palette: Deep Abyss & Divine Weaver */
+            --bg-void: #020203;
+            --bg-panel: rgba(10, 10, 16, 0.7);
+
             --spell-cyan: #00f0ff;
-            --spell-dim: #005f66;
+            --spell-dim: #004a50;
+            --spell-glow: rgba(0, 240, 255, 0.4);
+
+            --weaver-gold: #ffd700;
+            --weaver-dim: #5c4d00;
+            --weaver-glow: rgba(255, 215, 0, 0.3);
+
             --text-main: #e0e0e0;
             --text-muted: #6b7280;
-            --gold: #ffd700;
-            --danger: #ff2a2a;
+
+            --border-faint: rgba(255, 255, 255, 0.05);
+
+            /* Animations */
+            --ease-out-quint: cubic-bezier(0.23, 1, 0.32, 1);
         }
 
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            cursor: default; /* System cursor feel */
+            cursor: default;
+        }
+
+        ::selection {
+            background: var(--spell-cyan);
+            color: #000;
         }
 
         body {
-            background-color: var(--bg-deep);
+            background-color: var(--bg-void);
             color: var(--text-main);
             font-family: 'Space Mono', monospace;
             min-height: 100vh;
             overflow-x: hidden;
-            background-image: 
-                radial-gradient(circle at 50% 50%, rgba(0, 240, 255, 0.03) 0%, transparent 50%),
-                linear-gradient(rgba(0,0,0,0.1) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(0,0,0,0.1) 1px, transparent 1px);
-            background-size: 100% 100%, 20px 20px, 20px 20px;
-        }
-
-        /* Scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: var(--bg-deep);
-        }
-        ::-webkit-scrollbar-thumb {
-            background: var(--spell-dim);
-            border: 1px solid var(--spell-cyan);
-        }
-
-        /* Utilities */
-        .spell-text {
-            color: var(--spell-cyan);
-            text-shadow: 0 0 5px rgba(0, 240, 255, 0.5);
-        }
-        
-        .spell-border {
-            border: 1px solid var(--spell-dim);
-            box-shadow: 0 0 10px rgba(0, 240, 255, 0.05);
-            background: rgba(10, 10, 18, 0.8);
-            backdrop-filter: blur(5px);
-        }
-
-        .cinzel {
-            font-family: 'Cinzel', serif;
-        }
-
-        .container {
-            max-width: 1000px;
-            margin: 0 auto;
-            padding: 20px;
             position: relative;
-            z-index: 10;
         }
 
-        /* Runes Background - Purely Aesthetic */
-        .runes-bg {
+        /* --------------------------
+           BACKGROUND LAYERS
+           -------------------------- */
+
+        /* 1. Weaver's Web (Canvas) */
+        #weaverCanvas {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
+            z-index: -2;
+            opacity: 0.3;
             pointer-events: none;
-            z-index: 0;
-            overflow: hidden;
-            opacity: 0.05;
-            font-family: 'Cinzel', serif;
-            word-wrap: break-word;
-            font-size: 2rem;
-            line-height: 3rem;
-            color: var(--spell-cyan);
-            user-select: none;
+            /* Let clicks pass through unless we want interaction */
         }
 
-        /* Header / Status Section */
+        /* 2. Abyssal Fog */
+        .fog-container {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 40vh;
+            z-index: -1;
+            overflow: hidden;
+            pointer-events: none;
+            opacity: 0.6;
+        }
+
+        .fog-layer {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 200%;
+            height: 100%;
+            background: linear-gradient(to top, rgba(0, 240, 255, 0.05), transparent);
+            filter: blur(20px);
+            animation: drift 20s infinite linear;
+        }
+
+        .fog-layer:nth-child(2) {
+            animation-duration: 35s;
+            animation-direction: alternate;
+            background: linear-gradient(to top, rgba(255, 215, 0, 0.02), transparent);
+            left: -50%;
+        }
+
+        @keyframes drift {
+            0% {
+                transform: translateX(0);
+            }
+
+            100% {
+                transform: translateX(-50%);
+            }
+        }
+
+        /* --------------------------
+           SCROLLBAR
+           -------------------------- */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-void);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--spell-dim);
+            border-radius: 3px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--spell-cyan);
+        }
+
+
+        /* --------------------------
+           UTILITY CLASSES
+           -------------------------- */
+        .cinzel {
+            font-family: 'Cinzel', serif;
+        }
+
+        .text-gold {
+            color: var(--weaver-gold);
+            text-shadow: 0 0 10px var(--weaver-glow);
+        }
+
+        .text-cyan {
+            color: var(--spell-cyan);
+            text-shadow: 0 0 10px var(--spell-glow);
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* --------------------------
+           HEADER
+           -------------------------- */
         header {
-            margin-bottom: 40px;
-            margin-top: 40px;
-            border-bottom: 1px solid var(--spell-dim);
+            margin-bottom: 60px;
+            border-bottom: 1px solid var(--border-faint);
             padding-bottom: 20px;
             position: relative;
+            animation: fadeInDown 1s var(--ease-out-quint);
         }
 
         header::after {
@@ -113,154 +177,246 @@
             position: absolute;
             bottom: -1px;
             left: 0;
-            width: 100px;
-            height: 3px;
-            background: var(--spell-cyan);
-            box-shadow: 0 0 10px var(--spell-cyan);
+            width: 0%;
+            height: 2px;
+            background: linear-gradient(90deg, var(--spell-cyan), transparent);
+            animation: expandWidth 1.5s 0.5s forwards var(--ease-out-quint);
         }
 
-        .true-name {
-            font-size: 0.9rem;
-            color: var(--spell-cyan);
-            letter-spacing: 0.2em;
-            text-transform: uppercase;
-            margin-bottom: 10px;
-            display: block;
-        }
-
-        h1 {
-            font-size: 3rem;
-            font-weight: 700;
-            color: white;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            line-height: 1;
-            margin-bottom: 10px;
-        }
-
-        .rank-badge {
-            display: inline-block;
-            border: 1px solid var(--spell-cyan);
-            padding: 5px 12px;
-            font-size: 0.8rem;
-            color: var(--spell-cyan);
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            background: rgba(0, 240, 255, 0.1);
-        }
-
-        /* Grid Layout */
-        .grid-layout {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 40px;
-        }
-
-        @media (min-width: 768px) {
-            .grid-layout {
-                grid-template-columns: 300px 1fr;
+        @keyframes expandWidth {
+            to {
+                width: 100%;
             }
         }
 
-        /* Sidebar (Attributes) */
-        .attribute-box {
-            margin-bottom: 30px;
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
-        .section-title {
-            font-size: 1.2rem;
+        .true-name {
+            font-size: 0.85rem;
             color: var(--text-muted);
-            border-bottom: 1px solid var(--border-dim);
-            padding-bottom: 5px;
-            margin-bottom: 15px;
+            letter-spacing: 0.3em;
             text-transform: uppercase;
-            letter-spacing: 0.1em;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        h1.main-title {
+            font-size: 4rem;
+            font-weight: 900;
+            color: white;
+            text-transform: uppercase;
+            line-height: 0.9;
+            margin-bottom: 15px;
+            text-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+            letter-spacing: -0.02em;
+        }
+
+        .rank-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 16px;
+            background: rgba(0, 240, 255, 0.05);
+            border: 1px solid var(--spell-dim);
+            color: var(--spell-cyan);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            box-shadow: 0 0 15px rgba(0, 240, 255, 0.1);
+        }
+
+        /* --------------------------
+           LAYOUT
+           -------------------------- */
+        .grid-layout {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 50px;
+        }
+
+        @media (min-width: 850px) {
+            .grid-layout {
+                grid-template-columns: 320px 1fr;
+            }
+        }
+
+        /* --------------------------
+           SIDEBAR (ATTRIBUTES)
+           -------------------------- */
+        .panel {
+            background: var(--bg-panel);
+            border: 1px solid var(--border-faint);
+            backdrop-filter: blur(10px);
+            padding: 25px;
+            margin-bottom: 30px;
+            position: relative;
+            transition: transform 0.3s ease, border-color 0.3s ease;
+        }
+
+        .panel::before {
+            /* Corner accent */
+            content: '';
+            position: absolute;
+            top: -1px;
+            left: -1px;
+            width: 10px;
+            height: 10px;
+            border-top: 1px solid var(--spell-cyan);
+            border-left: 1px solid var(--spell-cyan);
+            opacity: 0.5;
+            transition: opacity 0.3s;
+        }
+
+        .panel:hover {
+            border-color: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .panel:hover::before {
+            opacity: 1;
+        }
+
+        .panel-title {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            border-bottom: 1px solid var(--border-faint);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
             display: flex;
             align-items: center;
             gap: 10px;
+            letter-spacing: 0.1em;
         }
-        
-        .section-title i {
-            color: var(--spell-cyan);
+
+        .panel-title i {
+            color: var(--weaver-gold);
         }
 
         .stat-row {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 12px;
-            font-size: 0.95rem;
+            margin-bottom: 15px;
+            font-size: 0.9rem;
         }
 
         .stat-label {
             color: var(--text-muted);
         }
 
-        .stat-val {
-            color: var(--text-main);
+        .stat-value {
             font-weight: bold;
         }
 
-        .stat-val.gold { color: var(--gold); text-shadow: 0 0 5px rgba(255, 215, 0, 0.3); }
-        .stat-val.cyan { color: var(--spell-cyan); }
-
-        /* Main Content */
-        .description {
-            line-height: 1.8;
-            color: var(--text-main);
-            margin-bottom: 40px;
-            border-left: 2px solid var(--spell-dim);
-            padding-left: 20px;
-            background: linear-gradient(90deg, rgba(0, 240, 255, 0.05), transparent);
+        .contact-link {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.2s;
         }
 
-        /* Aspects (Skills) */
-        .aspects-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+        .contact-link:hover {
+            color: var(--spell-cyan);
+        }
+
+
+        /* --------------------------
+           MAIN CONTENT
+           -------------------------- */
+        .content-section {
+            margin-bottom: 60px;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
             gap: 15px;
-            margin-bottom: 40px;
+            margin-bottom: 30px;
         }
 
-        .aspect-card {
-            background: rgba(255,255,255,0.03);
-            border: 1px solid var(--border-dim);
-            padding: 15px;
+        .section-line {
+            height: 1px;
+            flex-grow: 1;
+            background: linear-gradient(90deg, var(--border-faint), transparent);
+        }
+
+        .section-header h2 {
+            font-size: 1.5rem;
+            color: white;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        /* Description */
+        .lore-text {
+            line-height: 1.8;
+            color: #ccc;
+            border-left: 2px solid var(--weaver-gold);
+            padding-left: 25px;
+            background: linear-gradient(90deg, rgba(255, 215, 0, 0.05), transparent);
+            padding-top: 20px;
+            padding-bottom: 20px;
+            font-style: italic;
+        }
+
+        /* Skills Grid */
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+            gap: 20px;
+        }
+
+        .skill-hex {
+            position: relative;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border-faint);
+            padding: 20px 10px;
             text-align: center;
             transition: all 0.3s ease;
+            clip-path: polygon(10% 0, 100% 0, 100% 90%, 90% 100%, 0 100%, 0 10%);
         }
 
-        .aspect-card:hover {
+        .skill-hex:hover {
+            background: rgba(0, 240, 255, 0.1);
             border-color: var(--spell-cyan);
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+            box-shadow: 0 0 20px rgba(0, 240, 255, 0.15);
+            transform: translateY(-5px);
         }
 
-        .aspect-rank {
-            font-size: 0.7rem;
+        .skill-rank {
+            font-size: 0.65rem;
             color: var(--text-muted);
             text-transform: uppercase;
             margin-bottom: 5px;
             display: block;
         }
 
-        .aspect-name {
-            color: var(--spell-cyan);
+        .skill-name {
+            color: white;
             font-weight: bold;
+            font-size: 0.9rem;
         }
 
         /* Memories (Projects) */
         .memory-card {
-            border: 1px solid var(--border-dim);
-            padding: 20px;
-            margin-bottom: 20px;
-            background: rgba(10, 10, 18, 0.6);
+            background: linear-gradient(180deg, rgba(10, 10, 12, 0.8), rgba(5, 5, 8, 0.95));
+            border: 1px solid var(--border-faint);
+            padding: 30px;
+            margin-bottom: 30px;
             position: relative;
-            transition: all 0.3s ease;
-        }
-
-        .memory-card:hover {
-            border-color: var(--spell-cyan);
-            box-shadow: 0 0 20px rgba(0, 240, 255, 0.1);
+            overflow: hidden;
+            transition: all 0.4s var(--ease-out-quint);
         }
 
         .memory-card::before {
@@ -268,234 +424,297 @@
             position: absolute;
             top: 0;
             left: 0;
-            width: 3px;
-            height: 0%;
-            background: var(--spell-cyan);
-            transition: height 0.3s ease;
+            width: 2px;
+            height: 100%;
+            background: var(--weaver-gold);
+            transform: scaleY(0);
+            transition: transform 0.3s ease;
+            transform-origin: top;
+        }
+
+        .memory-card:hover {
+            transform: translateX(5px);
+            box-shadow: -5px 5px 30px rgba(0, 0, 0, 0.5);
+            border-color: rgba(255, 215, 0, 0.2);
         }
 
         .memory-card:hover::before {
-            height: 100%;
+            transform: scaleY(1);
         }
 
         .memory-header {
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
-            margin-bottom: 10px;
+            margin-bottom: 15px;
         }
 
         .memory-title {
-            font-size: 1.1rem;
+            font-size: 1.3rem;
             color: white;
-            font-weight: bold;
+            font-weight: 700;
         }
 
         .memory-tier {
-            font-size: 0.75rem;
-            padding: 2px 6px;
+            font-size: 0.7rem;
             border: 1px solid var(--text-muted);
             color: var(--text-muted);
+            padding: 2px 8px;
             text-transform: uppercase;
+            border-radius: 2px;
         }
-        
+
         .memory-card:hover .memory-tier {
-            border-color: var(--spell-cyan);
-            color: var(--spell-cyan);
+            border-color: var(--weaver-gold);
+            color: var(--weaver-gold);
+            box-shadow: 0 0 10px var(--weaver-glow);
         }
 
         .memory-desc {
-            color: var(--text-muted);
-            font-size: 0.9rem;
-            margin-bottom: 15px;
+            font-size: 0.95rem;
+            color: #aaa;
+            margin-bottom: 20px;
             line-height: 1.6;
         }
 
+        .memory-actions {
+            display: flex;
+            gap: 20px;
+        }
+
         .memory-link {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            color: var(--spell-cyan);
-            text-decoration: none;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             text-transform: uppercase;
             letter-spacing: 0.1em;
+            color: var(--spell-cyan);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s;
         }
-        
+
         .memory-link:hover {
-            text-decoration: underline;
+            color: white;
+            text-shadow: 0 0 8px var(--spell-cyan);
         }
 
-        /* Floating particles/runes animation */
-        @keyframes float {
-            0% { transform: translateY(0); opacity: 0; }
-            50% { opacity: 0.5; }
-            100% { transform: translateY(-100px); opacity: 0; }
-        }
-
-        /* Loading Screen */
+        /* --------------------------
+           LOADER
+           -------------------------- */
         #loader {
             position: fixed;
             inset: 0;
             background: #000;
             z-index: 9999;
             display: flex;
-            justify-content: center;
             align-items: center;
+            justify-content: center;
             flex-direction: column;
-            font-family: 'Space Mono';
+            transition: opacity 0.5s ease;
         }
 
-        .loader-text {
+        .loader-rune {
+            font-size: 3rem;
             color: var(--spell-cyan);
-            margin-top: 20px;
-            letter-spacing: 0.2em;
-            animation: pulse 2s infinite;
+            animation: pulseRune 1.5s infinite alternate;
         }
 
-        @keyframes pulse {
-            0%, 100% { opacity: 1; text-shadow: 0 0 10px var(--spell-cyan); }
-            50% { opacity: 0.5; text-shadow: 0 0 2px var(--spell-cyan); }
+        .loader-bar {
+            width: 200px;
+            height: 2px;
+            background: #111;
+            margin-top: 20px;
+            position: relative;
+            overflow: hidden;
         }
-        
-        /* Mobile adjustments */
+
+        .loader-progress {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 0%;
+            background: var(--spell-cyan);
+            box-shadow: 0 0 10px var(--spell-cyan);
+            animation: load 2s ease-in-out forwards;
+        }
+
+        @keyframes load {
+            0% {
+                width: 0;
+            }
+
+            100% {
+                width: 100%;
+            }
+        }
+
+        @keyframes pulseRune {
+            from {
+                text-shadow: 0 0 10px var(--spell-cyan);
+                opacity: 0.5;
+            }
+
+            to {
+                text-shadow: 0 0 30px var(--spell-cyan);
+                opacity: 1;
+            }
+        }
+
+        /* Responsive */
         @media (max-width: 768px) {
-            h1 { font-size: 2rem; }
-            .grid-layout { grid-template-columns: 1fr; }
+            h1.main-title {
+                font-size: 2.5rem;
+            }
+
+            .grid-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .container {
+                padding: 20px;
+            }
         }
     </style>
 </head>
+
 <body>
 
-    <!-- Loading Screen -->
+    <!-- Loader -->
     <div id="loader">
-        <i data-lucide="hexagon" class="text-cyan-400 w-12 h-12 animate-spin" style="color: #00f0ff;"></i>
-        <div class="loader-text">INITIALIZING SPELL...</div>
+        <div class="loader-rune cinzel">ᚠ</div>
+        <div class="loader-bar">
+            <div class="loader-progress"></div>
+        </div>
     </div>
 
-    <!-- Background Runes -->
-    <div class="runes-bg" id="runesContainer">
-        <!-- JS will populate this -->
+    <!-- Background Web -->
+    <canvas id="weaverCanvas"></canvas>
+
+    <!-- Fog Layers -->
+    <div class="fog-container">
+        <div class="fog-layer"></div>
+        <div class="fog-layer"></div>
     </div>
 
     <div class="container">
-        
-        <!-- HEADER -->
+
+        <!-- Header -->
         <header>
-            <span class="true-name">[LOST FROM DSA]</span>
-            <h1 class="cinzel">[ABHIRAJ]</h1>
-            <div class="rank-badge">Rank: Supreme</div>
+            <span class="true-name scramble-text" data-text="[LOST FROM DSA]">[LOST FROM DSA]</span>
+            <h1 class="main-title cinzel scramble-text" data-text="[ABHIRAJ]">[ABHIRAJ]</h1>
+            <div class="rank-badge">
+                <i data-lucide="crown" width="14"></i> Rank: Supreme
+            </div>
         </header>
 
         <div class="grid-layout">
-            
-            <!-- LEFT COLUMN: ATTRIBUTES -->
+
+            <!-- Attributes Panel -->
             <aside>
-                <div class="attribute-box spell-border p-5">
-                    <div class="section-title">
+                <div class="panel">
+                    <div class="panel-title">
                         <i data-lucide="user"></i> Attributes
                     </div>
-                    
-                    <div class="stat-row">
-                        <span class="stat-label">Name</span>
-                        <span class="stat-val">[Abhiraj]</span>
-                    </div>
+
                     <div class="stat-row">
                         <span class="stat-label">True Name</span>
-                        <span class="stat-val cyan">Lost from DSA</span>
+                        <span class="stat-value text-cyan">Lost from DSA</span>
                     </div>
                     <div class="stat-row">
                         <span class="stat-label">Rank</span>
-                        <span class="stat-val">Supreme</span>
+                        <span class="stat-value">Supreme</span>
                     </div>
                     <div class="stat-row">
                         <span class="stat-label">Class</span>
-                        <span class="stat-val">[Unknown]</span>
+                        <span class="stat-value text-gold">Weaver's Disciple</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-label">Cores</span>
+                        <span class="stat-value">1 / 7 (Human)</span>
                     </div>
                 </div>
 
-                <div class="attribute-box">
-                    <div class="section-title">
+                <div class="panel">
+                    <div class="panel-title">
                         <i data-lucide="sparkles"></i> Innate Abilities
                     </div>
-                    <!-- Replace these with your Soft Skills or Traits -->
-                    <div class="mb-4">
-                        <div class="text-white text-sm font-bold mb-1">[Fated]</div>
-                        <div class="text-xs text-gray-500">Often encounters difficult bugs, but rewards are great.</div>
+                    <div style="margin-bottom: 15px;">
+                        <div class="text-gold" style="font-weight:bold; margin-bottom: 4px;">[Fated]</div>
+                        <div style="font-size: 0.8rem; color: #888;">Code breaks mysteriously, but success brings great
+                            fortune.</div>
                     </div>
-                    <div class="mb-4">
-                        <div class="text-white text-sm font-bold mb-1">[Weaver's Lineage]</div>
-                        <div class="text-xs text-gray-500">Can perceive the hidden threads of spaghetti code.</div>
+                    <div>
+                        <div class="text-cyan" style="font-weight:bold; margin-bottom: 4px;">[Weaver's Eye]</div>
+                        <div style="font-size: 0.8rem; color: #888;">Can perceive logic flows hidden from mortal sight.
+                        </div>
                     </div>
                 </div>
 
-                <div class="attribute-box">
-                    <div class="section-title">
+                <div class="panel">
+                    <div class="panel-title">
                         <i data-lucide="mail"></i> Contact
                     </div>
-                    <a href="mailto:your@email.com" class="block text-sm text-gray-400 hover:text-cyan-400 mb-2 transition-colors">
-                        [abhirajmukadam82@gmail.com]
-                    </a>
-                    <a href="#" class="block text-sm text-gray-400 hover:text-cyan-400 transition-colors">
-                        [LinkedIn / Github]
-                    </a>
+                    <a href="mailto:abhirajmukadam82@gmail.com" class="contact-link">[abhirajmukadam82@gmail.com]</a>
+                    <a href="#" class="contact-link">[LinkedIn Manifestation]</a>
+                    <a href="#" class="contact-link">[Github Repository]</a>
                 </div>
             </aside>
 
-            <!-- RIGHT COLUMN: CONTENT -->
+            <!-- Main Content -->
             <main>
-                <!-- BIO -->
-                <section class="mb-10">
-                    <div class="section-title">
-                        <i data-lucide="scroll"></i> Description
+
+                <!-- Description -->
+                <section class="content-section">
+                    <div class="section-header">
+                        <h2 class="cinzel">Description</h2>
+                        <div class="section-line"></div>
                     </div>
-                    <div class="description">
-                        <p>
-                            [objective: survive the codebase. attribute: [fated] — code breaks in mysterious ways. ⚖️ balanced between light and shadow.]
-                        </p>
+                    <div class="lore-text">
+                        "A soul adrift in the endless sea of algorithms. Objective: Survive the Nightmare of Spaghetti
+                        Code.
+                        Balance is maintained between the Light of Clean Architecture and the Shadow of Quick Hacks."
                     </div>
                 </section>
 
-                <!-- SKILLS / ASPECTS -->
-                <section class="mb-10">
-                    <div class="section-title">
-                        <i data-lucide="zap"></i> Aspects (Skills)
+                <!-- Aspects / Skills -->
+                <section class="content-section">
+                    <div class="section-header">
+                        <h2 class="cinzel">Aspects</h2>
+                        <div class="section-line"></div>
                     </div>
-                    <div class="aspects-grid">
-                        <!-- Skill 1 -->
-                        <div class="aspect-card">
-                            <span class="aspect-rank">Ascended</span>
-                            <div class="aspect-name">React.js</div>
+                    <div class="skills-grid">
+                        <div class="skill-hex">
+                            <span class="skill-rank">Ascended</span>
+                            <div class="skill-name">React.js</div>
                         </div>
-                        <!-- Skill 2 -->
-                        <div class="aspect-card">
-                            <span class="aspect-rank">Awakened</span>
-                            <div class="aspect-name">HTML & CSS</div>
+                        <div class="skill-hex">
+                            <span class="skill-rank">Awakened</span>
+                            <div class="skill-name">HTML & CSS</div>
                         </div>
-                        <!-- Skill 3 -->
-                        <div class="aspect-card">
-                            <span class="aspect-rank">Master</span>
-                            <div class="aspect-name">JavaScript</div>
+                        <div class="skill-hex">
+                            <span class="skill-rank">Master</span>
+                            <div class="skill-name">JavaScript</div>
                         </div>
-                        <!-- Skill 4 -->
-                        <div class="aspect-card">
-                            <span class="aspect-rank">Dormant</span>
-                            <div class="aspect-name">Python</div>
+                        <div class="skill-hex">
+                            <span class="skill-rank">Dormant</span>
+                            <div class="skill-name">Python</div>
                         </div>
-                         <!-- Skill 5 -->
-                         <div class="aspect-card">
-                            <span class="aspect-rank">Transcendent</span>
-                            <div class="aspect-name">Design</div>
+                        <div class="skill-hex">
+                            <span class="skill-rank">Transcendent</span>
+                            <div class="skill-name">Design</div>
                         </div>
                     </div>
                 </section>
 
-                <!-- PROJECTS / MEMORIES -->
-                <section>
-                    <div class="section-title">
-                        <i data-lucide="box"></i> Memories (Projects)
+                <!-- Memories / Projects -->
+                <section class="content-section">
+                    <div class="section-header">
+                        <h2 class="cinzel">Memories</h2>
+                        <div class="section-line"></div>
                     </div>
-                    
+
                     <!-- Project 1 -->
                     <div class="memory-card">
                         <div class="memory-header">
@@ -503,68 +722,186 @@
                             <span class="memory-tier">Supreme Tier</span>
                         </div>
                         <p class="memory-desc">
-                            [the nexus protocol is a forbidden weave of shadow-essence, an ancient tethering of spirits that allows the mindless husks of the abyss to whisper amongst themselves.]
+                            The Nexus Protocol is a forbidden weave of shadow-essence, an ancient tethering of spirits
+                            that allows the mindless husks of the abyss to whisper amongst themselves.
                         </p>
-                        <a href="#" class="memory-link">
-                            Inspect Memory <i data-lucide="https://github.com/syfmtexture/The-Nexus-Protocol-TNP-" width="14"></i>
-                        </a>
+                        <div class="memory-actions">
+                            <a href="https://github.com/syfmtexture/The-Nexus-Protocol-TNP-" class="memory-link">
+                                <i data-lucide="eye" width="14"></i> Inspect
+                            </a>
+                        </div>
                     </div>
 
                     <!-- Project 2 -->
                     <div class="memory-card">
                         <div class="memory-header">
-                            <div class="memory-title">Recruiter_dashb
- </div>
+                            <div class="memory-title">Recruiter_dashb</div>
                             <span class="memory-tier">Sacred Tier</span>
                         </div>
                         <p class="memory-desc">
-                            [Wield the authority of a sovereign. Within the memory of the spell, the sea of nameless shadows is quelled. every echo is cataloged, every soul-shard ranked by its potency.]
+                            Wield the authority of a sovereign. Within the memory of the spell, the sea of nameless
+                            shadows is quelled; every echo is cataloged, every soul-shard ranked by its potency.
                         </p>
-                        <a href="#" class="memory-link">
-                            Inspect Memory <i data-lucide="https://github.com/syfmtexture/Recruiter_dashb" width="14"></i>
-                        </a>
+                        <div class="memory-actions">
+                            <a href="https://github.com/syfmtexture/Recruiter_dashb" class="memory-link">
+                                <i data-lucide="eye" width="14"></i> Inspect
+                            </a>
+                        </div>
                     </div>
 
                 </section>
+
             </main>
         </div>
-
     </div>
 
+    <!-- SCRIPT MAGIC -->
     <script>
-        // Initialize Lucide Icons
+        // Init Icons
         lucide.createIcons();
 
-        // Loader logic
+        // 1. LOADER FADE OUT
         window.addEventListener('load', () => {
             setTimeout(() => {
-                document.getElementById('loader').style.opacity = '0';
+                const loader = document.getElementById('loader');
+                loader.style.opacity = '0';
                 setTimeout(() => {
-                    document.getElementById('loader').style.display = 'none';
+                    loader.style.display = 'none';
                 }, 500);
-            }, 1500); // 1.5s fake loading time for "immersion"
+            }, 2000);
         });
 
-        // Runes Background Generation
-        const runesContainer = document.getElementById('runesContainer');
-        const runes = "᚛᚜ᚠᚢᚦᚨᚱᚲᚷᚹᚺᚾᛁᛃᛈᛇᛉᛊᛏᛒᛖᛗᛚᛜᛞᛟ∮∯∰∇∆∏∑";
-        
-        function createRune() {
-            const span = document.createElement('span');
-            span.innerText = runes[Math.floor(Math.random() * runes.length)];
-            span.style.position = 'absolute';
-            span.style.left = Math.random() * 100 + 'vw';
-            span.style.top = Math.random() * 100 + 'vh';
-            span.style.fontSize = Math.random() * 20 + 10 + 'px';
-            span.style.opacity = Math.random() * 0.1;
-            span.style.transform = `rotate(${Math.random() * 360}deg)`;
-            
-            runesContainer.appendChild(span);
+        // 2. RUNIC SCRAMBLE EFFECT
+        const runes = "ᚠᚢᚦᚨᚱᚲᚷᚹᚺᚾᛁᛃᛈᛇᛉᛊᛏᛒᛖᛗᛚᛜᛞᛟ";
+        const scrambleElements = document.querySelectorAll('.scramble-text');
+
+        scrambleElements.forEach(el => {
+            const finalText = el.getAttribute('data-text');
+            // Initial scramble on load
+            let iterations = 0;
+            const interval = setInterval(() => {
+                el.innerText = finalText.split('')
+                    .map((char, index) => {
+                        if (index < iterations) return finalText[index];
+                        return runes[Math.floor(Math.random() * runes.length)];
+                    })
+                    .join('');
+
+                if (iterations >= finalText.length) clearInterval(interval);
+                iterations += 1 / 3; // Speed
+            }, 50);
+
+            // Re-scramble on hover
+            el.addEventListener('mouseenter', () => {
+                let hoverIter = 0;
+                const hoverInterval = setInterval(() => {
+                    el.innerText = finalText.split('')
+                        .map((char, index) => {
+                            if (index < hoverIter) return finalText[index];
+                            return runes[Math.floor(Math.random() * runes.length)];
+                        })
+                        .join('');
+
+                    if (hoverIter >= finalText.length) clearInterval(hoverInterval);
+                    hoverIter += 1 / 2;
+                }, 30);
+            });
+        });
+
+        // 3. WEAVER'S WEB CANVAS
+        const canvas = document.getElementById('weaverCanvas');
+        const ctx = canvas.getContext('2d');
+        let width, height;
+        let particles = [];
+
+        function resize() {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resize);
+        resize();
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * width;
+                this.y = Math.random() * height;
+                this.vx = (Math.random() - 0.5) * 0.5;
+                this.vy = (Math.random() - 0.5) * 0.5;
+                this.size = Math.random() * 2;
+            }
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+                if (this.x < 0 || this.x > width) this.vx *= -1;
+                if (this.y < 0 || this.y > height) this.vy *= -1;
+            }
+            draw() {
+                ctx.fillStyle = 'rgba(255, 215, 0, 0.5)'; // Gold dots
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
         }
 
-        for(let i=0; i<50; i++) {
-            createRune();
+        // Create particles
+        for (let i = 0; i < 60; i++) particles.push(new Particle());
+
+        // Mouse interaction
+        let mouse = { x: null, y: null };
+        window.addEventListener('mousemove', (e) => {
+            mouse.x = e.clientX;
+            mouse.y = e.clientY;
+        });
+
+        function animate() {
+            ctx.clearRect(0, 0, width, height);
+
+            // Update and draw particles
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+
+            // Draw connections (Weaver's threads)
+            particles.forEach((a, index) => {
+                // Connect to mouse
+                if (mouse.x) {
+                    const dx = a.x - mouse.x;
+                    const dy = a.y - mouse.y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+                    if (distance < 150) {
+                        ctx.strokeStyle = `rgba(255, 215, 0, ${1 - distance / 150})`;
+                        ctx.lineWidth = 1;
+                        ctx.beginPath();
+                        ctx.moveTo(a.x, a.y);
+                        ctx.lineTo(mouse.x, mouse.y);
+                        ctx.stroke();
+                    }
+                }
+
+                // Connect to other particles
+                for (let j = index + 1; j < particles.length; j++) {
+                    const b = particles[j];
+                    const dx = a.x - b.x;
+                    const dy = a.y - b.y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+
+                    if (distance < 100) {
+                        ctx.strokeStyle = `rgba(0, 240, 255, ${0.1 * (1 - distance / 100)})`; // Faint cyan connections
+                        ctx.lineWidth = 0.5;
+                        ctx.beginPath();
+                        ctx.moveTo(a.x, a.y);
+                        ctx.lineTo(b.x, b.y);
+                        ctx.stroke();
+                    }
+                }
+            });
+
+            requestAnimationFrame(animate);
         }
+        animate();
+
     </script>
 </body>
+
 </html>
